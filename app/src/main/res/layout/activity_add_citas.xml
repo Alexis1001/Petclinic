@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/cileo"
+    tools:context=".AddCitasActivity">
+
+    <LinearLayout
+        android:layout_width="391dp"
+        android:layout_height="589dp"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="8dp">
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="match_parent"
+            android:layout_height="173dp"
+            app:srcCompat="@drawable/vertical" />
+
+        <EditText
+            android:id="@+id/fecha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/fecha"
+            android:ems="10"
+            android:hint="anño-mes-dia"
+            android:inputType="date"
+            android:padding="10dp" />
+
+        <EditText
+            android:id="@+id/horas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/hora"
+            android:ems="10"
+            android:hint=" hora:minutos formato 12 hrs"
+            android:inputType="time"
+            android:padding="10dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="80dp"
+                android:layout_height="42dp"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/Especialidades"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="especialidad" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:id="@+id/spinner1"
+                android:layout_width="167dp"
+                android:layout_height="42dp"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/Mascota"
+                android:layout_width="209dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="mascota" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/Citas"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#5DADE2  "
+            android:text="cita" />
+
+    </LinearLayout>
+
+    <!--<LinearLayout
+        android:layout_width="394dp"
+        android:layout_height="48dp"
+        android:orientation="horizontal"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="296dp">
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="187dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/especialidades"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="especialidades" />
+    </LinearLayout>
+-->
+
+</android.support.constraint.ConstraintLayout>
