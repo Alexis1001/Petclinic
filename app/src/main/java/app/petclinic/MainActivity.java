@@ -9,13 +9,22 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 import app.petclinic.Conexion.Conexion;
 import app.petclinic.Modelos.Citas;
+import app.petclinic.Modelos.Credenciales.Login;
 import app.petclinic.Modelos.Credenciales.SuperUser;
 import app.petclinic.Modelos.Credenciales.Usuario;
 import app.petclinic.Servicio.CitasServicio;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -24,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     CitasServicio citasServicio;
     Button login;
     EditText UserName,password;
+    Citas cita;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,13 +50,48 @@ public class MainActivity extends AppCompatActivity {
             String user=UserName.getText().toString().trim();
             String pass=password.getText().toString().trim();
 
+
+                //LocalTime justoAhora = LocalTime.now();
+                //justoAhora.
+
+                //System.out.printf("En este momento son las %d horas con %d minutos y %d segundos\n", justoAhora.getHour(),
+                //        justoAhora.getMinute(), justoAhora.getSecond());
+
+                Calendar calendario = Calendar.getInstance();
+
+                int hora, minutos, segundos;
+
+                hora =calendario.get(Calendar.HOUR_OF_DAY);
+                minutos = calendario.get(Calendar.MINUTE);
+                segundos = calendario.get(Calendar.SECOND);
+
+                Date date = new Date();
+                DateFormat hourFormat = new SimpleDateFormat("HH:mm:ss");
+
+                DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+
+
+
+               // Citas cita =new Citas(3,2010-7-23,"2:35:00",10,1,0);
+            // Citas(int owner_id, String fecha, String hora, int mascota, int especialidad, int confirmacion) {
+
+               Citas citas=new  Citas(3,"2019-01-12","13:12:12",10, 1,0);
+
+
+
             if(!TextUtils.isEmpty(user)){
                 if(!TextUtils.isEmpty(pass)){
                     UserName.setText("");
                     password.setText("");
 
-                    Usuario usuario= new Usuario(user,pass);
-                    ObtenerToken(usuario);
+
+
+                    //Login(user); // le paso el correo
+                   // ObtenrCitas();
+                    Citas citax=new  Citas(3,"2019-01-12","13:12:12",10, 1,0);
+                    PostCitas(citax);
+
                 }
                 else{
                  password.setError("campo requerido");
@@ -100,6 +145,83 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Error en el servidor", Toast.LENGTH_SHORT).show();
             }
         });
+
+    }
+
+    public void Login(String gmail){
+        citasServicio= Conexion.getServiceRemoteCitas();
+        Call<Login> call=citasServicio.userLogin(gmail);
+
+        call.enqueue(new Callback<Login>() {
+            @Override
+            public void onResponse(Call<Login> call, Response<Login> response) {
+
+                if(response.isSuccessful()){
+
+                    System.out.println("respuesta perro "+response.body().getOwner_id());
+                }
+                else{
+                    System.out.println("no respuesta "+response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Login> call, Throwable t) {
+
+                System.out.println("respuesta fallida "+t+" llamada "+call);
+            }
+        });
+
+
+    }
+
+    public void ObtenrCitas(){
+        citasServicio= Conexion.getServiceRemoteCitas();
+        Call<List<Citas>> call =citasServicio.getCitas(4);
+
+        call.enqueue(new Callback<List<Citas>>() {
+            @Override
+            public void onResponse(Call<List<Citas>> call, Response<List<Citas>> response) {
+
+                if(response.isSuccessful()){
+                    System.out.println("respuesta correcta "+response.body());
+                }
+                else{
+                    System.out.println("respuesta fallida "+response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Citas>> call, Throwable t) {
+
+                System.out.println("llamada "+call +"Error "+t);
+            }
+
+        });
+    }
+
+    public void PostCitas(Citas cita){
+        citasServicio= Conexion.getServiceRemoteCitas();
+        Call<Citas> call=citasServicio.AddCitas(cita);
+
+        call.enqueue(new Callback<Citas>() {
+            @Override
+            public void onResponse(Call<Citas> call, Response<Citas> response) {
+                if(response.isSuccessful()){
+                    System.out.println("nueva cita "+response.body());
+                }
+                else{
+                    System.out.println("repuesta fallida cita "+response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Citas> call, Throwable t) {
+                System.out.println("Error "+t+" llamada "+call);
+            }
+        });
+
+
 
     }
 

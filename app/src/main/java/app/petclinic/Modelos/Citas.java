@@ -1,20 +1,48 @@
 package app.petclinic.Modelos;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import java.sql.Date;
 import java.sql.Time;
 
 public class Citas {
 
+    @SerializedName("id")
+    @Expose
     private int id;
+
+    @SerializedName("owner_id")
+    @Expose
     private int owner_id;
+
+    @SerializedName("fecha")
+    @Expose
     String fecha;
+
+    @SerializedName("hora")
+    @Expose
     String hora;
-    String mascota;
-    String  especialidad;
-    int confirmacion;
 
+    @SerializedName("mascota")
+    @Expose
+    int  mascota;
 
-    public Citas(){
+    @SerializedName("especialidad")
+    @Expose
+    int  especialidad;
 
+    @SerializedName("confirmacion")
+    @Expose
+    int  confirmacion;
+
+    public Citas(int owner_id, String fecha, String hora, int mascota, int especialidad, int confirmacion) {
+        this.owner_id = owner_id;
+        this.fecha = fecha;
+        this.hora = hora;
+        this.mascota = mascota;
+        this.especialidad = especialidad;
+        this.confirmacion = confirmacion;
     }
 
     public int getId() {
@@ -49,19 +77,19 @@ public class Citas {
         this.hora = hora;
     }
 
-    public String getMascota() {
+    public int getMascota() {
         return mascota;
     }
 
-    public void setMascota(String mascota) {
+    public void setMascota(int mascota) {
         this.mascota = mascota;
     }
 
-    public String getEspecialidad() {
+    public int getEspecialidad() {
         return especialidad;
     }
 
-    public void setEspecialidad(String especialidad) {
+    public void setEspecialidad(int especialidad) {
         this.especialidad = especialidad;
     }
 
@@ -71,18 +99,5 @@ public class Citas {
 
     public void setConfirmacion(int confirmacion) {
         this.confirmacion = confirmacion;
-    }
-
-    @Override
-    public String toString() {
-        return "Citas{" +
-                "id=" + id +
-                ", owner_id=" + owner_id +
-                ", fecha='" + fecha + '\'' +
-                ", hora='" + hora + '\'' +
-                ", mascota='" + mascota + '\'' +
-                ", especialidad='" + especialidad + '\'' +
-                ", confirmacion=" + confirmacion +
-                '}';
     }
 }

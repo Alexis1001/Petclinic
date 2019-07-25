@@ -98,8 +98,22 @@ public class MainCitas extends AppCompatActivity {
             }
 
             if(view.getId()==AgregarNuevaCita.getId()){
+
+                ArrayList<String> datos = new ArrayList<String>();
+
+                System.out.println("user id " +user_id);
+                System.out.println("user name " +user_name);
+                System.out.println("token " + token);
+
+                datos.add(String.valueOf(user_id));
+                datos.add(user_name);
+                datos.add(token);
+
                 Intent intent=new Intent(MainCitas.this,AddCitasActivity.class);
+                intent.putExtra("SuperUser",datos);
                 startActivity(intent);
+                Toast.makeText(MainCitas.this, "Agregar nueva cita", Toast.LENGTH_SHORT).show();
+
             }
 
 
@@ -140,6 +154,7 @@ public class MainCitas extends AppCompatActivity {
                 System.out.println("respues fallida "+call +" erro en el server "+t);
             }
         });
+
 
 
     }

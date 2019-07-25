@@ -7,10 +7,12 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import app.petclinic.ActualizandoDatos;
 import app.petclinic.ArrayAdapterListaPets;
 import app.petclinic.Conexion.Conexion;
 import app.petclinic.MainActivity;
 import app.petclinic.MainCitas;
+import app.petclinic.Modelos.Citas;
 import app.petclinic.Modelos.Pet;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,7 +25,7 @@ public class Peticiones {
     }
 
 
-    public void AgregarPet(Context contex, final int id_usuario, final String user_name, final String token, final Pet pet,
+    public void AgregarPet(final Context contex, final int id_usuario, final String user_name, final String token, final Pet pet,
                            final int id_mascota){
 
         citasServicio = Conexion.getServiceRemoteCitas();
@@ -46,14 +48,14 @@ public class Peticiones {
                     datos.add(user_name);
                     datos.add(token);
 
-                    //Intent intent=new Intent(MainActivity.this, MainCitas.class);
-                    //intent.putExtra("SuperUser",datos);
-                    //startActivity(intent);
-                    //Toast.makeText(MainActivity.this, "LOGEADO", Toast.LENGTH_SHORT).show();
+                    Intent intent=new Intent(contex,ActualizandoDatos.class);
+                    intent.putExtra("SuperUser",datos);
+                    contex.startActivity(intent);
+                    Toast.makeText(contex, "Mascota Agregada", Toast.LENGTH_SHORT).show();
+
                 } else {
                     System.out.println("Mascota no Agregada "+response.body());
                 }
-
 
             }
 
@@ -65,7 +67,7 @@ public class Peticiones {
 
     }
 
-    public void ActualizarDenuncia(Context contex, final int id_usuario, final String user_name, final String token, final Pet pet,
+    public void ActualizarDenuncia(final Context contex, final int id_usuario, final String user_name, final String token, final Pet pet,
                                    final int id_mascota) {
         citasServicio = Conexion.getServiceRemoteCitas();
 
@@ -89,12 +91,12 @@ public class Peticiones {
                     datos.add(user_name);
                     datos.add(token);
 
-                    //Intent intent=new Intent(MainActivity.this, MainCitas.class);
-                    //intent.putExtra("SuperUser",datos);
-                    //startActivity(intent);
-                    //Toast.makeText(MainActivity.this, "LOGEADO", Toast.LENGTH_SHORT).show();
+                    Intent intent=new Intent(contex, ActualizandoDatos.class);
+                    intent.putExtra("SuperUser",datos);
+                    contex.startActivity(intent);
+                    Toast.makeText(contex,"Mascota Actualizada", Toast.LENGTH_SHORT).show();
                 } else {
-                    System.out.println("de nuncia no actualizada "+response.body());
+                    System.out.println("Mascota  no actualizada "+response.body());
                 }
 
             }
@@ -108,7 +110,7 @@ public class Peticiones {
 
     }
 
-    public void BorrarPet(Context contex, final int id_usuario, final String user_name, final String token, final Pet pet,
+    public void BorrarPet(final Context contex, final int id_usuario, final String user_name, final String token, final Pet pet,
                                final int id_mascota) {
 
         citasServicio = Conexion.getServiceRemoteCitas();
@@ -130,12 +132,12 @@ public class Peticiones {
                     datos.add(user_name);
                     datos.add(token);
 
-                    //Intent intent=new Intent(MainActivity.this, MainCitas.class);
-                    //intent.putExtra("SuperUser",datos);
-                    //startActivity(intent);
-                    //Toast.makeText(MainActivity.this, "LOGEADO", Toast.LENGTH_SHORT).show();
+                    Intent intent=new Intent(contex,ActualizandoDatos.class);
+                    intent.putExtra("SuperUser",datos);
+                    contex.startActivity(intent);
+                    Toast.makeText(contex,"Mascota Eliminada", Toast.LENGTH_SHORT).show();
                 } else {
-                    System.out.println("de nuncia no borrada "+response.body());
+                    System.out.println("Mascota no eliminada "+response.body());
                 }
 
             }
@@ -149,4 +151,38 @@ public class Peticiones {
 
 
     }
+
+    public void AgregarCitas(final Context contex, final int id_usuario, final String user_name, final String token, final Citas cita){
+
+        citasServicio = Conexion.getServiceRemoteCitas();
+
+        System.out.println("agregar "+cita);
+
+        Call<Citas> call = citasServicio.addCita(token,cita);
+
+        call.enqueue(new Callback<Citas>() {
+            @Override
+            public void onResponse(Call<Citas> call, Response<Citas> response) {
+
+                if(response.isSuccessful()){
+                    System.out.println("respuesta "+response.body());
+                }
+                else{
+                    System.out.println("respuesta fallida "+response.body());
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<Citas> call, Throwable t) {
+                System.out.println("llamada "+call +"error "+t);
+
+            }
+        });
+
+    }
+
+
+
+
 }
