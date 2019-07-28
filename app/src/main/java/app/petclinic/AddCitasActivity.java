@@ -3,6 +3,7 @@ package app.petclinic;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -18,9 +19,16 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import app.petclinic.Conexion.Conexion;
+import app.petclinic.Modelos.Appointment;
 import app.petclinic.Modelos.Citas;
 import app.petclinic.Modelos.Pet;
+import app.petclinic.Servicio.CitasServicio;
 import app.petclinic.Servicio.Peticiones;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AddCitasActivity extends AppCompatActivity {
 
@@ -35,16 +43,16 @@ public class AddCitasActivity extends AppCompatActivity {
     Button Especialidades,Mascota,Citasxx;
 
     //variables de las horas
-    int hora ,minuto ;
+    int hora ,minuto,segundos ;
     String date_time="";
 
-    int user_id;
-    String user_name;
-    String token;
+
+    String id_usuarioS="";
+    int id_usuario=0;
 
     String Hora_minutos;
     String fecha1;
-
+    CitasServicio citasServicio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +75,8 @@ public class AddCitasActivity extends AppCompatActivity {
         final List<String> especialidades = new ArrayList<>();
         List<String> mascotas = new ArrayList<>();
 
-        especialidades.add("cardiologia ");
-        especialidades.add("dermatologia ");
+        especialidades.add("cardiologia");
+        especialidades.add("dermatologia");
         especialidades.add("fisoterapia");
 
         mascotas.add("cat");
@@ -78,12 +86,12 @@ public class AddCitasActivity extends AppCompatActivity {
         mascotas.add("bird");
         mascotas.add("hamster");
 
-        ArrayList<String> datos=getIntent().getStringArrayListExtra("SuperUser");
 
-        user_id=Integer.parseInt(datos.get(0));
-        user_name=datos.get(1);
-        token=datos.get(2);
+        id_usuarioS=getIntent().getStringExtra("id_usuario");
+        id_usuario=Integer.parseInt(id_usuarioS);
 
+        System.out.println("id_usuarioS "+id_usuarioS);
+        System.out.println("id_usuario "+id_usuario);
 
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,especialidades);
@@ -130,38 +138,30 @@ public class AddCitasActivity extends AppCompatActivity {
         Citasxx.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 String TipoMascota=SpinnerMascotas.getSelectedItem().toString();
                 String TipoEspecialidad=SpinnerEspecialidades.getSelectedItem().toString();
-
-                int pet=getType(TipoMascota);
+                int pet=getTipo(TipoMascota);
                 int especialidadx=getEspecialidad(TipoEspecialidad);
 
-                System.out.println("tipo mascota "+TipoMascota);
-                System.out.println("tipo especialidad "+TipoEspecialidad);
+                if(fecha1!=null){
+                    if(Hora_minutos!=null){
 
-                System.out.println("owner_id "+user_id);
-                System.out.println("fecha "+fecha1);
-                System.out.println("hora "+Hora_minutos);
-                System.out.println("tipo mascota "+pet);
-                System.out.println("especialidad "+especialidadx);
-                System.out.println("boolean "+false);
+                        Appointment cita=new Appointment(id_usuario,fecha1,Hora_minutos,pet,especialidadx,0); //asi no se envia la fecha
+                        PostCitas(cita);// esta metodo si funciona
 
-                //Citas(int owner_id, String fecha, String hora, int mascota, int especialidad, boolean delete)
-                //Citas cita=new Citas(user_id,fecha1,Hora_minutos,pet,especialidadx,false);
-                //Peticiones peticiones=new Peticiones();
-                //peticiones.AgregarCitas(AddCitasActivity.this,user_id,user_name,token,cita);
+                   }
+                    else{
+                        Toast.makeText(AddCitasActivity.this, "Campos vacios ", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else{
+                    Toast.makeText(AddCitasActivity.this, "Campos vacios ", Toast.LENGTH_SHORT).show();
 
-
-
+                }
             }
         });
 
-
     }
-
-
-    // inicio de selector de fechas
 
     private DatePickerDialog.OnDateSetListener mDateSetListener = new DatePickerDialog.OnDateSetListener() {
 
@@ -169,8 +169,9 @@ public class AddCitasActivity extends AppCompatActivity {
             anio = year;
             mes = monthOfYear;
             dia = dayOfMonth;
-            fecha1=(anio+1)+"-"+mes+"-"+dia;
+            fecha1=anio+"-"+(mes+1)+"-"+dia;
             fecha.setText(fecha1);
+            //anio lequite uno (anio+1)
         }
 
     };
@@ -183,32 +184,28 @@ public class AddCitasActivity extends AppCompatActivity {
         }
         return null;
     }
-    // fin de selector de fechas
-
-
-    // incio de selector de hora
 
     private void TimePicker(){
          hora = Calendario.get(Calendar.HOUR_OF_DAY);
          minuto = Calendario.get(Calendar.MINUTE);
-        // Launch Time Picker Dialog
+         segundos=Calendario.get(Calendar.SECOND);
         TimePickerDialog timePickerDialog = new TimePickerDialog(this,
                 new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         hora=hourOfDay;
                         minuto=minute;
+                        System.out.println("segundos perro "+segundos);
 
-                        Hora_minutos=date_time+" "+hourOfDay + ":"+ minute; //aqui agrego nuevo
+
+                        Hora_minutos=hourOfDay+":"+minute+":"+00;//aqui agrego nuevo
                         horas.setText(date_time+" "+hourOfDay + ":" + minute);
                     }
                 },hora,minuto, false);
         timePickerDialog.show();
     }
 
-    // fin de selector de hora
-
-    public int getType(String type){
+    public int getTipo(String type){
         int numero=0;
 
         if(type.equals("cat")){
@@ -233,16 +230,16 @@ public class AddCitasActivity extends AppCompatActivity {
         return numero;
     }
 
-    public int getEspecialidad(String type){
+    public int getEspecialidad(String especialidad){
         int numerox=0;
-
-        if(type.equals("cardiologia")){
+        System.out.println("especialidad metodo get especialidad "+especialidad);
+        if(especialidad.equals("cardiologia")){
             numerox=1;
         }
-        if(type.equals("dermatologia")){
+        if(especialidad.equals("dermatologia")){
             numerox=2;
         }
-        if(type.equals("fisoterapia")){
+        if(especialidad.equals("fisoterapia")){
             numerox=3;
         }
 
@@ -250,7 +247,37 @@ public class AddCitasActivity extends AppCompatActivity {
     }
 
 
+    public void PostCitas(Appointment cita){
+        citasServicio= Conexion.getServiceRemoteCitas();
+        Integer owner_id=cita.getOwner_id();
+        String fecha=cita.getFecha();
+        String hora=cita.getHora();
+        Integer mascota=cita.getMascota();
+        Integer especialidad=cita.getEspecialidad();
+        Integer confirmacion=cita.getConfirmacion();
+        //Call<ResponseBody> call=  citasServicio.AddAppoinment(4,"2015-07-27","15:12:00",4,2,0); si funciona de esta manera
+        Call<ResponseBody> call= citasServicio.AddAppoinment(owner_id,fecha,hora,mascota,especialidad,confirmacion);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful()){
+                    System.out.println("nueva cita agregada  "+response.body());
+                    Intent intent=new Intent(AddCitasActivity.this,ActualizandoDatos.class);
+                    intent.putExtra("id_usuario",id_usuarioS);
+                    startActivity(intent);
+                    Toast.makeText(AddCitasActivity.this, "Nueva cita ", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    System.out.println("repuesta fallida cita "+response.body());
+                }
+            }
 
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                System.out.println("Error cita "+t+" llamada "+call);
+            }
+        });
 
+    }
 
 }
