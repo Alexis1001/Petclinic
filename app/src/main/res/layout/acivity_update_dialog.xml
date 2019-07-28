@@ -14,34 +14,40 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <!--<TextView
-        android:id="@+id/Propietario"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="propietario"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-       -->
-
     <EditText
-        android:id="@+id/ActualizarNombreMascota"
+        android:id="@+id/NombreMascota"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
         android:hint="nombre de la mascota " />
 
     <EditText
-        android:id="@+id/ActualizarFecha"
+        android:id="@+id/FechaCita"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="date"
-        android:hint="fecha de nacimiento" />
+        android:hint="hora de la cita " />
 
     <EditText
-        android:id="@+id/ActualizarType"
+        android:id="@+id/HoraCita"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="date"
+        android:hint="hora de la cita " />
+
+    <EditText
+        android:id="@+id/TipoMascota"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
         android:hint="tipo de mascota" />
+
+    <EditText
+        android:id="@+id/Confirmacion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="confirmacion" />
 
 
     <LinearLayout

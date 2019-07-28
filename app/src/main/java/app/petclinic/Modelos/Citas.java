@@ -26,7 +26,7 @@ public class Citas {
 
     @SerializedName("mascota")
     @Expose
-    int  mascota;
+    String   mascota;
 
     @SerializedName("especialidad")
     @Expose
@@ -34,9 +34,9 @@ public class Citas {
 
     @SerializedName("confirmacion")
     @Expose
-    int  confirmacion;
+    String  confirmacion;
 
-    public Citas(int owner_id, String fecha, String hora, int mascota, int especialidad, int confirmacion) {
+    public Citas(int owner_id, String fecha, String hora, String mascota, int especialidad, String confirmacion) {
         this.owner_id = owner_id;
         this.fecha = fecha;
         this.hora = hora;
@@ -44,6 +44,17 @@ public class Citas {
         this.especialidad = especialidad;
         this.confirmacion = confirmacion;
     }
+    public Citas(){}
+
+    public Citas(int id,int owner_id, String fecha, String hora, String  mascota, int especialidad, String confirmacion) {
+        this.owner_id = owner_id;
+        this.fecha = fecha;
+        this.hora = hora;
+        this.mascota = mascota;
+        this.especialidad = especialidad;
+        this.confirmacion = confirmacion;
+    }
+
 
     public int getId() {
         return id;
@@ -77,11 +88,11 @@ public class Citas {
         this.hora = hora;
     }
 
-    public int getMascota() {
+    public String getMascota() {
         return mascota;
     }
 
-    public void setMascota(int mascota) {
+    public void setMascota(String  mascota) {
         this.mascota = mascota;
     }
 
@@ -93,11 +104,24 @@ public class Citas {
         this.especialidad = especialidad;
     }
 
-    public int getConfirmacion() {
+    public String  getConfirmacion() {
         return confirmacion;
     }
 
-    public void setConfirmacion(int confirmacion) {
+    public void setConfirmacion(String  confirmacion) {
         this.confirmacion = confirmacion;
+    }
+
+    @Override
+    public String toString() {
+        return "Citas{" +
+                "id=" + id +
+                ", owner_id=" + owner_id +
+                ", fecha='" + fecha + '\'' +
+                ", hora='" + hora + '\'' +
+                ", mascota='" + mascota + '\'' +
+                ", especialidad=" + especialidad +
+                ", confirmacion='" + confirmacion + '\'' +
+                '}';
     }
 }

@@ -4,7 +4,7 @@ import app.petclinic.Servicio.CitasServicio;
 
 public class Conexion {
 
-    public static String API_URL = "http://192.168.49.200:8080/api/";
+    public static String API_URL = "http://192.168.0.2:8080/api/";
 
     public static CitasServicio getServiceRemoteCitas(){
 

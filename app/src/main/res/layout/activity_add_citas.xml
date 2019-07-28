@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/fecha"
             android:ems="10"
-            android:hint="anño-mes-dia"
+            android:hint="año-mes-dia"
             android:inputType="date"
             android:padding="10dp" />
 

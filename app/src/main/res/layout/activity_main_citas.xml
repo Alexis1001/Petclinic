@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@drawable/cileo"
 
     android:layout_height="match_parent"
     tools:context=".MainCitas">
@@ -25,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:onClick="onClick"
-                android:text="log out" />
+                android:text="salir " />
 
             <Button
                 android:id="@+id/ButtonNuevaCita"
@@ -33,15 +34,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:onClick="onClick"
-                android:text="citas" />
+                android:text="agregar nueva cita" />
 
-            <Button
-                android:id="@+id/ButtonNuevaMascota"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="onClick"
-                android:text="add pet" />
         </LinearLayout>
 
         <TextView
@@ -49,12 +43,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="5dp"
-            android:text="Lista de mascotas"
+            android:text="Lista citas"
             android:textAlignment="center"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
 
         <ListView
-            android:id="@+id/ListaPerros"
+            android:id="@+id/ListaCitas"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>

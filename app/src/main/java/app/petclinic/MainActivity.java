@@ -47,51 +47,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+
             String user=UserName.getText().toString().trim();
             String pass=password.getText().toString().trim();
 
-
-                //LocalTime justoAhora = LocalTime.now();
-                //justoAhora.
-
-                //System.out.printf("En este momento son las %d horas con %d minutos y %d segundos\n", justoAhora.getHour(),
-                //        justoAhora.getMinute(), justoAhora.getSecond());
-
-                Calendar calendario = Calendar.getInstance();
-
-                int hora, minutos, segundos;
-
-                hora =calendario.get(Calendar.HOUR_OF_DAY);
-                minutos = calendario.get(Calendar.MINUTE);
-                segundos = calendario.get(Calendar.SECOND);
-
-                Date date = new Date();
-                DateFormat hourFormat = new SimpleDateFormat("HH:mm:ss");
-
-                DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-
-
-
-
-               // Citas cita =new Citas(3,2010-7-23,"2:35:00",10,1,0);
-            // Citas(int owner_id, String fecha, String hora, int mascota, int especialidad, int confirmacion) {
-
-               Citas citas=new  Citas(3,"2019-01-12","13:12:12",10, 1,0);
-
-
-
             if(!TextUtils.isEmpty(user)){
                 if(!TextUtils.isEmpty(pass)){
-                    UserName.setText("");
-                    password.setText("");
-
-
-
-                    //Login(user); // le paso el correo
-                   // ObtenrCitas();
-                    Citas citax=new  Citas(3,"2019-01-12","13:12:12",10, 1,0);
-                    PostCitas(citax);
-
+                    LoginUsuario(user);
                 }
                 else{
                  password.setError("campo requerido");
@@ -109,120 +71,38 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void ObtenerToken(Usuario usuario){
+    public void LoginUsuario(String gmail){
         citasServicio= Conexion.getServiceRemoteCitas();
-        Call<SuperUser> call=citasServicio.login(usuario);
-        System.out.println("pasa por la llamada call ");
+        Call<String> call=citasServicio.userLogin(gmail);
 
-        call.enqueue(new Callback<SuperUser>() {
+        call.enqueue(new Callback<String>() {
             @Override
-            public void onResponse(Call<SuperUser> call, Response<SuperUser> response) {
-
-                ArrayList<String > datos=new ArrayList<String>();
-
-                String  user_id=String.valueOf(response.body().getUser_id());
-                String  UserName=response.body().getUsername();
-                String  token ="Token "+response.body().getToken();
-
-                System.out.println("user id "+user_id);
-                System.out.println("user name "+UserName);
-                System.out.println("token "+token);
-
-                datos.add(user_id);
-                datos.add(UserName);
-                datos.add(token);
-
-                Intent intent=new Intent(MainActivity.this,MainCitas.class);
-                intent.putExtra("SuperUser",datos);
-                startActivity(intent);
-                Toast.makeText(MainActivity.this, "LOGEADO", Toast.LENGTH_SHORT).show();
-
-            }
-
-            @Override
-            public void onFailure(Call<SuperUser> call, Throwable t) {
-                System.out.println("error "+t+" call "+call);
-                Toast.makeText(MainActivity.this, "Error en el servidor", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-    }
-
-    public void Login(String gmail){
-        citasServicio= Conexion.getServiceRemoteCitas();
-        Call<Login> call=citasServicio.userLogin(gmail);
-
-        call.enqueue(new Callback<Login>() {
-            @Override
-            public void onResponse(Call<Login> call, Response<Login> response) {
+            public void onResponse(Call<String> call, Response<String> response) {
 
                 if(response.isSuccessful()){
-
-                    System.out.println("respuesta perro "+response.body().getOwner_id());
+                    System.out.println("respuesta login "+response.body());
+                    String id_usuario=response.body();
+                    Intent intent=new Intent(MainActivity.this,MainCitas.class);
+                    intent.putExtra("id_usuario",id_usuario);
+                    startActivity(intent);
+                    Toast.makeText(MainActivity.this, "Login Exitoso ", Toast.LENGTH_SHORT).show();
+                    UserName.setText("");
+                    password.setText("");
                 }
                 else{
-                    System.out.println("no respuesta "+response.body());
+                    System.out.println("respuesta fallida login "+response.body());
+                    Toast.makeText(MainActivity.this, "intentelo de nuevo", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<Login> call, Throwable t) {
-
-                System.out.println("respuesta fallida "+t+" llamada "+call);
+            public void onFailure(Call<String> call, Throwable t) {
+                System.out.println("respuesta fallida  error "+t+" llamada "+call);
+                Toast.makeText(MainActivity.this, "Error en el servidor "+t, Toast.LENGTH_SHORT).show();
             }
         });
 
-
     }
 
-    public void ObtenrCitas(){
-        citasServicio= Conexion.getServiceRemoteCitas();
-        Call<List<Citas>> call =citasServicio.getCitas(4);
-
-        call.enqueue(new Callback<List<Citas>>() {
-            @Override
-            public void onResponse(Call<List<Citas>> call, Response<List<Citas>> response) {
-
-                if(response.isSuccessful()){
-                    System.out.println("respuesta correcta "+response.body());
-                }
-                else{
-                    System.out.println("respuesta fallida "+response.body());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Citas>> call, Throwable t) {
-
-                System.out.println("llamada "+call +"Error "+t);
-            }
-
-        });
-    }
-
-    public void PostCitas(Citas cita){
-        citasServicio= Conexion.getServiceRemoteCitas();
-        Call<Citas> call=citasServicio.AddCitas(cita);
-
-        call.enqueue(new Callback<Citas>() {
-            @Override
-            public void onResponse(Call<Citas> call, Response<Citas> response) {
-                if(response.isSuccessful()){
-                    System.out.println("nueva cita "+response.body());
-                }
-                else{
-                    System.out.println("repuesta fallida cita "+response.body());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Citas> call, Throwable t) {
-                System.out.println("Error "+t+" llamada "+call);
-            }
-        });
-
-
-
-    }
 
 }
